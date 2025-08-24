@@ -4,6 +4,7 @@ import com.dev.farm.config.SecurityConfig;
 import com.dev.farm.entity.User;
 import com.dev.farm.entity.UserPrincipal;
 import com.dev.farm.repository.UserRepository;
+import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,12 +21,13 @@ import org.springframework.stereotype.Service;
 import java.util.Optional;
 
 @Service
+@RequiredArgsConstructor
 public class CustomUserDetailsService implements UserDetailsService {
 
     private Logger log = LoggerFactory.getLogger(CustomUserDetailsService.class);
 
-    @Autowired
-    private UserRepository userRepository;
+
+    private final UserRepository userRepository;
 
 
 

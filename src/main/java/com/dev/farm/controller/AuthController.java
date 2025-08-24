@@ -2,49 +2,27 @@ package com.dev.farm.controller;
 
 import com.dev.farm.dto.AuthRequest;
 import com.dev.farm.dto.AuthResponse;
-import com.dev.farm.entity.User;
-import com.dev.farm.service.CustomUserDetailsService;
-import com.dev.farm.util.JwtUtil;
-import org.springframework.beans.factory.annotation.Autowired;
+import com.dev.farm.service.AuthService;
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.userdetails.UserCache;
-import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.core.userdetails.UserDetailsService;
-import org.springframework.security.core.userdetails.cache.NullUserCache;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/api/auth")
+@RequiredArgsConstructor
 public class AuthController {
 
-    @Autowired
-    private AuthenticationManager authenticationManager;
+    private final AuthService authService;
 
-    @Autowired
-    private JwtUtil jwtUtil;
-
-    @Autowired
-    private UserDetailsService userDetailsService;
-
-////    @Autowired
-//    private ConcurrentMapUserCache userCache;
 
     @PostMapping("/login")
-    public ResponseEntity<?> createAuthenticationToken(@RequestBody AuthRequest authRequest) {
-//        userCache.putUserInCache(userDetailsService.loadUserByUsername(authRequest.getUsername()));
-        try {
-            authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(authRequest.getUsername(), authRequest.getPassword()));
+    public ResponseEntity<AuthResponse> createAuthenticationToken(@RequestBody AuthRequest authRequest) {
+        return ResponseEntity.ok(authService.login(authRequest));
+    }
 
-        } catch (Exception e) {
-            return ResponseEntity.badRequest().body("Invalid credentials");
-        }
-
-        final UserDetails userDetails = userDetailsService.loadUserByUsername(authRequest.getUsername());
-        final String jwt = jwtUtil.generateToken(userDetails.getUsername());
-
-        return ResponseEntity.ok(new AuthResponse(jwt));
+    @PostMapping("/register")
+    public ResponseEntity<AuthRequest> createUser(@RequestBody AuthRequest authRequest) {
+        return ResponseEntity.ok(authService.register(authRequest));
     }
 
     @GetMapping("/test")

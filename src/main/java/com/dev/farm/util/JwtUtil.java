@@ -5,6 +5,7 @@ import io.jsonwebtoken.security.Keys;
 import org.springframework.stereotype.Component;
 
 import javax.crypto.SecretKey;
+import java.nio.charset.StandardCharsets;
 import java.util.Date;
 
 @Component
@@ -12,7 +13,7 @@ public class JwtUtil {
 
     // Generate a secure key (you should store this in application.properties)
     private final SecretKey secretKey = Keys.hmacShaKeyFor(
-            "kIf8WNoIP9U8/5aauWLNAwGF5wFZqWPdFa68+LaLLP4=".getBytes()
+            "kIf8WNoIP9U8/5aauWLNAwGF5wFZqWPdFa68+LaLLP4=".getBytes(StandardCharsets.UTF_8)
     );
 
     // Token validity: 10 hours
